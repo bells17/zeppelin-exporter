@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"github.com/jessevdk/go-flags"
 	"io/ioutil"
@@ -11,87 +12,104 @@ import (
 )
 
 type Options struct {
-	Host     string `long:"host" description:"Zeppelin host" required:"true"`
+	Host     string `long:"host" description:"Zeppelin host" default:"127.0.0.1"`
 	Port     int    `short:"p" long:"port" description:"port" default:"8080"`
 	Protocol string `long:"protocol" description:"protocol" default:"http"`
 }
 
-type noteBookListResponse struct {
+type noteBooksResponse struct {
 	Status  string     `json:"status"`
 	Message string     `json:"message"`
-	Body    []Notebook `json:body`
+	Body    []Notebook `json:"body"`
 }
 
 type Notebook struct {
 	ID   string `json:"id"`
-	Name string `json:name`
+	Name string `json:"name"`
 }
 
 func main() {
+	opts := getOptions()
+	endpoint := fmt.Sprintf("%s://%s:%d", opts.Protocol, opts.Host, opts.Port)
+
+	notebookIds, err := fetchNotebookIds(endpoint)
+	if err != nil {
+		fmt.Fprintln(os.Stderr, err)
+		os.Exit(1)
+	}
+
+	notebooks, err := fetchExportedNotebooks(endpoint, notebookIds)
+	if err != nil {
+		fmt.Fprintln(os.Stderr, err)
+		os.Exit(1)
+	}
+	fmt.Println("[" + strings.Join(notebooks[:], ",") + "]")
+}
+
+func getOptions() Options {
 	opts := Options{}
 	psr := flags.NewParser(&opts, flags.Default)
 	_, err := psr.Parse()
 	if err != nil {
 		os.Exit(1)
 	}
+	return opts
+}
 
-	url := fmt.Sprintf("%s://%s:%d", opts.Protocol, opts.Host, opts.Port)
-	res, err := http.Get(url + "/api/notebook")
+func fetchNotebookIds(endpoint string) ([]string, error) {
+	res, err := http.Get(endpoint + "/api/notebook")
 	if err != nil {
-		fmt.Println(err)
-		return
+		return nil, err
 	}
 	defer res.Body.Close()
 
 	b, err := ioutil.ReadAll(res.Body)
 	if err != nil {
-		fmt.Println(err)
-		return
+		return nil, err
 	}
 
 	jsonBytes := ([]byte)(string(b))
-	data := new(noteBookListResponse)
-	if err := json.Unmarshal(jsonBytes, data); err != nil {
-		fmt.Println("JSON Unmarshal error:", err)
-		return
+	data := new(noteBooksResponse)
+	err = json.Unmarshal(jsonBytes, data)
+	if err != nil {
+		return nil, err
 	}
 
-	if data.Status != "OK" {
-		fmt.Println("Fetch notebook list response status: " + data.Status)
-		return
-	}
-
-	notebooks := []string{}
+	notebookIds := []string{}
 	for _, notebook := range data.Body {
-		res, err := http.Get(url + "/api/notebook/export/" + notebook.ID)
+		notebookIds = append(notebookIds, notebook.ID)
+	}
+	return notebookIds, nil
+}
+
+func fetchExportedNotebooks(endpoint string, notebookIds []string) ([]string, error) {
+	notebooks := []string{}
+	for _, notebookId := range notebookIds {
+		res, err := http.Get(endpoint + "/api/notebook/export/" + notebookId)
 		if err != nil {
-			fmt.Println(err)
-			return
+			return nil, err
 		}
 		defer res.Body.Close()
 
 		b, err := ioutil.ReadAll(res.Body)
 		if err != nil {
-			fmt.Println(err)
-			return
+			return nil, err
 		}
 
 		var notebook interface{}
 		err = json.Unmarshal(([]byte)(string(b)), &notebook)
 		if err != nil {
-			fmt.Println("JSON Unmarshal error:", err)
-			return
+			return nil, err
 		}
 
 		var notebookBody interface{}
 		notebookBody = notebook.(map[string]interface{})["body"]
 		str, ok := notebookBody.(string)
 		if !ok {
-			fmt.Println("Error stringify")
-			return
+			return nil, errors.New("Error stringify")
 		}
 		notebooks = append(notebooks, str)
 	}
 
-	fmt.Println("[" + strings.Join(notebooks[:], ",") + "]")
+	return notebooks, nil
 }

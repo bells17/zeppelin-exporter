@@ -1,1 +1,4 @@
 /vendor
+
+!/zeppelin-exporter.go
+/zeppelin-exporter*
