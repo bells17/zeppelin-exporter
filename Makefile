@@ -1,4 +1,4 @@
-VERSION=0.1.0
+VERSION=0.1.1
 
 all: gom bundle build
 
@@ -15,7 +15,10 @@ linux:
 	GOOS=linux GOARCH=amd64 gom build -o zeppelin-exporter
 
 fmt:
-	go fmt ./...
+	gom exec go fmt ./...
+
+test:
+	gom exec go test -v .
 
 dist:
 	git archive --format tgz HEAD -o zeppelin-exporter-$(VERSION).tar.gz --prefix zeppelin-exporter-$(VERSION)/

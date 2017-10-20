@@ -1,1 +1,2 @@
 gom "github.com/jessevdk/go-flags"
+gom "gopkg.in/jarcoal/httpmock.v1"
