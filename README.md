@@ -7,8 +7,7 @@ The export tool for all zeppelin notebooks.
 ```
 go get github.com/bells17/go-zeppelin-exporter
 cd $GOPATH/src/github.com/bells17/go-zeppelin-exporter
-make
-mv go-zeppelin-exporter /path/to/bin
+make && make install
 ```
 
 ## Usage
