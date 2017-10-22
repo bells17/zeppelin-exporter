@@ -22,11 +22,11 @@ fmt:
 test:
 	gom exec go test -v .
 
-build-cross: build-cross
+build-cross:
 	GOOS=linux GOARCH=amd64 gom build -ldflags '-X main.BuildVersion=${VERSION}' -o bin/linux/amd64/zeppelin-exporter
 	GOOS=darwin GOARCH=amd64 gom build -ldflags '-X main.BuildVersion=${VERSION}' -o bin/darwin/amd64/zeppelin-exporter
 
-dist:
+dist: build-cross
 	cd bin/linux/amd64/ && tar cvf zeppelin-exporter-linux-amd64-${VERSION}.tar zeppelin-exporter && zopfli zeppelin-exporter-linux-amd64-${VERSION}.tar
 	cd bin/darwin/amd64/ && tar cvf zeppelin-exporter-darwin-amd64-${VERSION}.tar zeppelin-exporter && zopfli zeppelin-exporter-darwin-amd64-${VERSION}.tar
 
