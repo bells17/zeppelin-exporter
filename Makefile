@@ -1,4 +1,4 @@
-VERSION=0.1.4
+VERSION=0.1.5
 
 all: gom bundle build
 
@@ -11,7 +11,7 @@ bundle:
 	gom install
 
 build:
-	gom build -ldflags '-X main.BuildVersion=${VERSION}' -o zeppelin-exporter
+	gom build -ldflags '-X main.BuildVersion=${VERSION}' -o bin/zeppelin-exporter
 
 install:
 	install zeppelin-exporter /usr/local/bin/zeppelin-exporter
@@ -23,18 +23,29 @@ test:
 	gom exec go test -v .
 
 build-cross:
-	GOOS=linux GOARCH=amd64 gom build -ldflags '-X main.BuildVersion=${VERSION}' -o bin/linux/amd64/zeppelin-exporter
-	GOOS=darwin GOARCH=amd64 gom build -ldflags '-X main.BuildVersion=${VERSION}' -o bin/darwin/amd64/zeppelin-exporter
+  GOOS=linux GOARCH=amd64 gom build -ldflags '-X main.BuildVersion=${VERSION}' -o bin/zeppelin-exporter-linux-amd64
+  GOOS=darwin GOARCH=amd64 gom build -ldflags '-X main.BuildVersion=${VERSION}' -o bin/zeppelin-exporter-darwin-amd64
 
 dist: build-cross
-	cd bin/linux/amd64/ && tar cvf zeppelin-exporter-linux-amd64-${VERSION}.tar zeppelin-exporter && zopfli zeppelin-exporter-linux-amd64-${VERSION}.tar
-	cd bin/darwin/amd64/ && tar cvf zeppelin-exporter-darwin-amd64-${VERSION}.tar zeppelin-exporter && zopfli zeppelin-exporter-darwin-amd64-${VERSION}.tar
+	cd bin && \
+		tar cvf release/zeppelin-exporter-linux-amd64-${VERSION}.tar zeppelin-exporter-linux-amd64 && \
+		zopfli release/zeppelin-exporter-linux-amd64-${VERSION}.tar && \
+		rm release/zeppelin-exporter-linux-amd64-${VERSION}.tar
+	cd bin && \
+		tar cvf release/zeppelin-exporter-darwin-amd64-${VERSION}.tar zeppelin-exporter-darwin-amd64 && \
+		zopfli release/zeppelin-exporter-darwin-amd64-${VERSION}.tar && \
+		rm release/zeppelin-exporter-darwin-amd64-${VERSION}.tar
 
 clean:
-	rm -f zeppelin-exporter
-	rm -f ./bin/*/*/*
+	rm -f bin/zeppelin-exporter*
+	rm -f bin/release/zeppelin-exporter*
 
 tag:
 	git tag v${VERSION}
 	git push origin v${VERSION}
 	git push origin master
+
+release: dist
+	rm -f bin/release/.gitkeep && \
+		ghr ${VERSION} bin/release && \
+		touch bin/release/.gitkeep

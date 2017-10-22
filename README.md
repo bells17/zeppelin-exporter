@@ -40,8 +40,14 @@ Help Options:
 - https://zeppelin.apache.org/docs/0.6.1/rest-api/rest-notebook.html#export-a-notebook
 - https://zeppelin.apache.org/docs/0.6.1/rest-api/rest-notebook.html#import-a-notebook
 
+## Development
 
-## Run Testing
+### Requirements
+
+- [ghr](https://github.com/tcnksm/ghr)
+- [zopfli](https://github.com/google/zopfli)
+
+### Run Testing
 
 ```
 make test
