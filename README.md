@@ -45,10 +45,18 @@ Help Options:
 ### Requirements
 
 - [ghr](https://github.com/tcnksm/ghr)
+  - And need set your Github Token(export GITHUB_TOKEN="...")
 - [zopfli](https://github.com/google/zopfli)
 
 ### Run Testing
 
 ```
 make test
+```
+
+### Release
+
+```
+make tag
+make release
 ```
