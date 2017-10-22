@@ -50,10 +50,18 @@ Help Options:
   - And need set your Github Token(export GITHUB_TOKEN="...")
 - [zopfli](https://github.com/google/zopfli)
 
+
+### Use Docker
+
+```
+docker-compose run builder bash
+```
+
 ### Initialize
 
 ```
 make init
+make bundle
 ```
 
 ### Run Testing

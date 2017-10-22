@@ -1,11 +1,14 @@
 VERSION=0.1.5
 
-all: gom bundle build
+all: gom ghr bundle build
 
-init: gom bundle
+init: gom ghr
 
 gom:
 	go get -u github.com/mattn/gom
+
+ghr:
+	go get -u github.com/tcnksm/ghr
 
 bundle:
 	gom install
