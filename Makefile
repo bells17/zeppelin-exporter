@@ -23,8 +23,8 @@ test:
 	gom exec go test -v .
 
 build-cross:
-  GOOS=linux GOARCH=amd64 gom build -ldflags '-X main.BuildVersion=${VERSION}' -o bin/zeppelin-exporter-linux-amd64
-  GOOS=darwin GOARCH=amd64 gom build -ldflags '-X main.BuildVersion=${VERSION}' -o bin/zeppelin-exporter-darwin-amd64
+	GOOS=linux GOARCH=amd64 gom build -ldflags '-X main.BuildVersion=${VERSION}' -o bin/zeppelin-exporter-linux-amd64
+	GOOS=darwin GOARCH=amd64 gom build -ldflags '-X main.BuildVersion=${VERSION}' -o bin/zeppelin-exporter-darwin-amd64
 
 dist: build-cross
 	cd bin && \
@@ -41,11 +41,12 @@ clean:
 	rm -f bin/release/zeppelin-exporter*
 
 tag:
+	git checkout master
 	git tag v${VERSION}
 	git push origin v${VERSION}
 	git push origin master
 
-release: dist
+release: clean dist
 	rm -f bin/release/.gitkeep && \
 		ghr ${VERSION} bin/release && \
 		touch bin/release/.gitkeep
