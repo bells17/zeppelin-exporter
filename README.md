@@ -1,5 +1,7 @@
 # zeppelin-exporter
 
+The export tool for all zeppelin notebooks.
+
 ## Installation
 
 ```

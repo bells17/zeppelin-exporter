@@ -17,7 +17,7 @@ type Options struct {
 	Protocol string `long:"protocol" description:"protocol" default:"http"`
 }
 
-type noteBooksResponse struct {
+type NoteBooksResponse struct {
 	Status  string     `json:"status"`
 	Message string     `json:"message"`
 	Body    []Notebook `json:"body"`
@@ -69,7 +69,7 @@ func fetchNotebookIds(endpoint string) ([]string, error) {
 	}
 
 	jsonBytes := ([]byte)(string(b))
-	data := new(noteBooksResponse)
+	data := new(NoteBooksResponse)
 	err = json.Unmarshal(jsonBytes, data)
 	if err != nil {
 		return nil, err
