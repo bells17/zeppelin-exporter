@@ -4,6 +4,8 @@ The export tool for all zeppelin notebooks.
 
 ## Installation
 
+Get binary from [here](https://github.com/bells17/go-zeppelin-exporter/releases/latest) or build yourself.
+
 ```
 go get github.com/bells17/go-zeppelin-exporter
 cd $GOPATH/src/github.com/bells17/go-zeppelin-exporter
