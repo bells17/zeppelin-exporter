@@ -37,7 +37,7 @@ func TestFetchNotebookIds(t *testing.T) {
 	}
 }
 
-func TestFetchExportedNotebooks(t *testing.T) {
+func TestExportNotebooks(t *testing.T) {
 	endpoint := "http://127.0.0.1:8080"
 	notebookIds := []string{"2CG4GYWN1"}
 	// A "body" value is need an encoded json string
@@ -53,7 +53,7 @@ func TestFetchExportedNotebooks(t *testing.T) {
 	httpmock.RegisterResponder("GET", endpoint+"/api/notebook/export/"+notebookIds[0],
 		httpmock.NewStringResponder(200, res))
 
-	notebooks, err := fetchExportedNotebooks(endpoint, notebookIds)
+	notebooks, err := exportNotebooks(endpoint, notebookIds)
 	if err != nil {
 		t.Fatal(err)
 	}
