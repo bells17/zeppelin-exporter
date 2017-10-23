@@ -1,5 +1,7 @@
 # zeppelin-exporter
 
+![build status](https://circleci.com/gh/bells17/zeppelin-exporter.svg?style=shield&circle-token= d52e2fd4f50e8ad8e2584da53979d9713b37b060)
+
 The export tool for all zeppelin notebooks.
 
 ## Installation
