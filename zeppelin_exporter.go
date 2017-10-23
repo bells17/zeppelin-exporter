@@ -8,16 +8,20 @@ import (
 	"io/ioutil"
 	"net/http"
 	"os"
+	"runtime"
 	"strings"
 )
+
+var BuildVersion string
 
 type Options struct {
 	Host     string `long:"host" description:"Zeppelin host" default:"127.0.0.1"`
 	Port     int    `short:"p" long:"port" description:"port" default:"8080"`
 	Protocol string `long:"protocol" description:"protocol" default:"http"`
+	Version  bool   `long:"version" description:"print version"`
 }
 
-type noteBooksResponse struct {
+type NoteBooksResponse struct {
 	Status  string     `json:"status"`
 	Message string     `json:"message"`
 	Body    []Notebook `json:"body"`
@@ -30,8 +34,12 @@ type Notebook struct {
 
 func main() {
 	opts := getOptions()
-	endpoint := fmt.Sprintf("%s://%s:%d", opts.Protocol, opts.Host, opts.Port)
+	if opts.Version {
+		printVersion()
+		os.Exit(0)
+	}
 
+	endpoint := fmt.Sprintf("%s://%s:%d", opts.Protocol, opts.Host, opts.Port)
 	notebookIds, err := fetchNotebookIds(endpoint)
 	if err != nil {
 		fmt.Fprintln(os.Stderr, err)
@@ -56,6 +64,15 @@ func getOptions() Options {
 	return opts
 }
 
+func printVersion() {
+	fmt.Printf(`zeppelin-exporter %s
+Compiler: %s %s
+`,
+		BuildVersion,
+		runtime.Compiler,
+		runtime.Version())
+}
+
 func fetchNotebookIds(endpoint string) ([]string, error) {
 	res, err := http.Get(endpoint + "/api/notebook")
 	if err != nil {
@@ -69,7 +86,7 @@ func fetchNotebookIds(endpoint string) ([]string, error) {
 	}
 
 	jsonBytes := ([]byte)(string(b))
-	data := new(noteBooksResponse)
+	data := new(NoteBooksResponse)
 	err = json.Unmarshal(jsonBytes, data)
 	if err != nil {
 		return nil, err

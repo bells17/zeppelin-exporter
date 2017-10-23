@@ -1,0 +1,10 @@
+version: '2'
+services:
+  builder:
+    tty: true
+    stdin_open: true
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - .:/go/src/app

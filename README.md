@@ -1,12 +1,15 @@
 # zeppelin-exporter
 
+The export tool for all zeppelin notebooks.
+
 ## Installation
+
+Get binary from [here](https://github.com/bells17/zeppelin-exporter/releases/latest) or build yourself.
 
 ```
 go get github.com/bells17/zeppelin-exporter
 cd $GOPATH/src/github.com/bells17/zeppelin-exporter
-make
-mv zeppelin-exporter /path/to/bin
+make && make install
 ```
 
 ## Usage
@@ -39,9 +42,43 @@ Help Options:
 - https://zeppelin.apache.org/docs/0.6.1/rest-api/rest-notebook.html#export-a-notebook
 - https://zeppelin.apache.org/docs/0.6.1/rest-api/rest-notebook.html#import-a-notebook
 
+## Development
 
-## Run Testing
+### Requirements
+
+- [ghr](https://github.com/tcnksm/ghr)
+  - And need set your Github Token(export GITHUB_TOKEN="...")
+- [zopfli](https://github.com/google/zopfli)
+
+
+### Use Docker
+
+```
+docker-compose run builder bash
+```
+
+### Initialize
+
+```
+make init
+make bundle
+```
+
+### Run Testing
 
 ```
 make test
+```
+
+### Build
+
+```
+make build
+```
+
+### Release
+
+```
+make tag
+make release
 ```

@@ -1,2 +1,6 @@
 gom "github.com/jessevdk/go-flags"
-gom "gopkg.in/jarcoal/httpmock.v1"
+
+# Execute only in the "test" environment.
+group :test do
+  gom "gopkg.in/jarcoal/httpmock.v1"
+end
