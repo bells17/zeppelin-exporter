@@ -1,0 +1,15 @@
+version: 2
+jobs:
+  build:
+    working_directory: /go/src/app
+    docker:
+      - image: golang:1.9.1
+    steps:
+      - checkout
+      - setup_remote_docker
+      - run:
+          name: Run tests
+          command: |
+            make init
+            make bundle
+            make test
