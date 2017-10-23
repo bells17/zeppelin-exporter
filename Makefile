@@ -1,4 +1,6 @@
 VERSION=0.1.6
+USER=bells17
+REPOSITORY=zeppelin-exporter
 
 all: gom ghr bundle build
 
@@ -51,5 +53,5 @@ tag:
 
 release: clean dist
 	rm -f bin/release/.gitkeep && \
-		ghr ${VERSION} bin/release && \
+		ghr -u ${USER} -r ${REPOSITORY} ${VERSION} bin/release && \
 		touch bin/release/.gitkeep
