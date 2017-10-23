@@ -46,7 +46,7 @@ func main() {
 		os.Exit(1)
 	}
 
-	notebooks, err := fetchExportedNotebooks(endpoint, notebookIds)
+	notebooks, err := exportNotebooks(endpoint, notebookIds)
 	if err != nil {
 		fmt.Fprintln(os.Stderr, err)
 		os.Exit(1)
@@ -99,7 +99,7 @@ func fetchNotebookIds(endpoint string) ([]string, error) {
 	return notebookIds, nil
 }
 
-func fetchExportedNotebooks(endpoint string, notebookIds []string) ([]string, error) {
+func exportNotebooks(endpoint string, notebookIds []string) ([]string, error) {
 	notebooks := []string{}
 	for _, notebookId := range notebookIds {
 		res, err := http.Get(endpoint + "/api/notebook/export/" + notebookId)
