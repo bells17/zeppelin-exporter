@@ -1,8 +1,8 @@
 # zeppelin-exporter
 
-[![GitHub release](http://img.shields.io/github/release/bells17/zeppelin-exporter.svg?style=flat-square)][release]
+![GitHub release](http://img.shields.io/github/release/bells17/zeppelin-exporter.svg?style=flat-square)
 [![CircleCI](https://img.shields.io/circleci/project/github/bells17/zeppelin-exporter.svg)](https://circleci.com/gh/bells17/zeppelin-exporter)
-[![MIT License](http://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)][license]
+![MIT License](http://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)
 
 The export tool for all zeppelin notebooks.
 
