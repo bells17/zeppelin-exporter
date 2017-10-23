@@ -3,16 +3,16 @@
 ## Installation
 
 ```
-go get github.com/bells17/go-zeppelin-exporter
-cd $GOPATH/src/github.com/bells17/go-zeppelin-exporter
+go get github.com/bells17/zeppelin-exporter
+cd $GOPATH/src/github.com/bells17/zeppelin-exporter
 make
-mv go-zeppelin-exporter /path/to/bin
+mv zeppelin-exporter /path/to/bin
 ```
 
 ## Usage
 
 ```
-go-zeppelin-exporter --host 127.0.0.1 -p 8080 > notebooks.json
+zeppelin-exporter --host 127.0.0.1 -p 8080 > notebooks.json
 cat notebooks.json | jq .[0] > notebook1.json
 content=`cat notebook1.json`
 curl -v -H "Accept: application/json" -H "Content-type: application/json" -d $content http://127.0.0.1:8080/api/notebook/import
