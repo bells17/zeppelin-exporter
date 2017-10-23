@@ -13,7 +13,7 @@ ghr:
 	go get -u github.com/tcnksm/ghr
 
 bundle:
-	gom install
+	gom -test install
 
 build:
 	gom build -ldflags '-X main.BuildVersion=${VERSION}' -o bin/zeppelin-exporter
